@@ -1,9 +1,9 @@
 {
   "version": 2,
-  "buildCommand": "npm install",
+  "public": false,
   "builds": [
     {
-      "src": "server.js",
+      "src": "package.json",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
@@ -12,19 +12,26 @@
           "middleware/**",
           "public/**",
           "supabase/**",
-          ".env"
+          "server.js",
+          ".env",
+          "package.json",
+          "package-lock.json"
         ]
       }
     }
   ],
   "routes": [
     {
+      "src": "/public/(.*)",
+      "dest": "/public/$1"
+    },
+    {
       "src": "/api/(.*)",
-      "dest": "server.js"
+      "dest": "/server.js"
     },
     {
       "src": "/(.*)",
-      "dest": "server.js"
+      "dest": "/server.js"
     }
   ],
   "env": {
