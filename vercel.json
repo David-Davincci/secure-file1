@@ -1,9 +1,7 @@
 {
-  "buildCommand": "echo 'No build needed'",
-  "outputDirectory": "public",
   "rewrites": [
     {
-      "source": "/api/:path*",
+      "source": "/(.*)",
       "destination": "/api"
     }
   ]

@@ -44,8 +44,11 @@ app.use(express.json({ limit: '50mb' })); // Increase limit for file uploads if 
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cookieParser());
 
-// Static Files
+
+// Static Files - Path adjusted for Vercel serverless deployment
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public')); // Fallback for serverless environment
+
 
 // API Routes
 app.use('/api/auth', authRoutes);
@@ -65,12 +68,12 @@ app.use('/api/files', fileRoutes);
 app.use((err, req, res, next) => {
   console.error('❌ Server Error:', err.message);
   console.error(err.stack);
-  
+
   // Don't crash the server on error
   if (res.headersSent) {
     return next(err);
   }
-  
+
   res.status(err.status || 500).json({
     error: err.message || 'Internal Server Error',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
