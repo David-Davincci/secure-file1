@@ -13,3 +13,4 @@ test-*.js
 COMPLETE_SETUP.js
 scripts/
 supabase/
+debug-env.js
