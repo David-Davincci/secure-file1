@@ -1,40 +1,12 @@
 {
-  "version": 2,
-  "public": false,
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": [
-          "lib/**",
-          "routes/**",
-          "middleware/**",
-          "public/**",
-          "supabase/**",
-          "server.js",
-          ".env",
-          "package.json",
-          "package-lock.json"
-        ]
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/public/(.*)",
-      "dest": "/public/$1"
+      "source": "/api/(.*)",
+      "destination": "/api"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/server.js"
+      "source": "/(.*)",
+      "destination": "/api"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }
