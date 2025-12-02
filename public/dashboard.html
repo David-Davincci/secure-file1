@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Secure Cloud</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="/dashboard.html" class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <img src="/logo.png" alt="Secure Cloud" style="width: 32px; height: 32px;">
+        <span>Secure Cloud</span>
+      </a>
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span id="user-email" style="color: var(--text-muted); font-size: 0.9rem;"></span>
+        <button onclick="logout()" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container" style="padding-top: 2rem; padding-bottom: 2rem;">
+    <div class="dashboard-header">
+      <h2>My Secure Files</h2>
+      <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+        + Upload File
+      </button>
+    </div>
+
+    <div class="upload-zone" id="drop-zone">
+      <input type="file" id="file-input" style="display: none" onchange="handleFileSelect(this.files)">
+      <div style="font-size: 3rem; margin-bottom: 1rem;">☁️</div>
+      <h3>Drag & Drop files here</h3>
+      <p style="color: var(--text-muted);">or click to browse (Max 50MB)</p>
+      <div id="upload-progress" style="display: none; margin-top: 1rem; color: var(--primary);">
+        <div class="spinner" style="display: inline-block; vertical-align: middle; margin-right: 8px;"></div>
+        Encrypting & Uploading...
+      </div>
+    </div>
+
+    <div id="alert-container" class="alert"></div>
+
+    <div id="file-list" class="file-list">
+      <!-- Files will be populated here -->
+      <div style="text-align: center; padding: 2rem;">
+        <div class="spinner" style="display: inline-block;"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Preview Modal -->
+  <div id="preview-modal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal">&times;</button>
+      <div id="preview-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    // Dashboard Logic
+    document.addEventListener('DOMContentLoaded', async () => {
+      const user = await checkAuth();
+      if (!user) {
+        window.location.href = '/auth/login.html';
+        return;
+      }
+
+      document.getElementById('user-email').textContent = user.email;
+      loadFiles();
+
+      // Drag & Drop
+      const dropZone = document.getElementById('drop-zone');
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+      });
+
+      dropZone.addEventListener('drop', handleDrop, false);
+    });
+
+    function handleDrop(e) {
+      const dt = e.dataTransfer;
+      const files = dt.files;
+      handleFileSelect(files);
+    }
+
+    async function handleFileSelect(files) {
+      if (files.length === 0) return;
+
+      const file = files[0];
+      if (file.size > 50 * 1024 * 1024) {
+        showAlert('error', 'File too large. Max 50MB allowed.');
+        return;
+      }
+
+      const progress = document.getElementById('upload-progress');
+      progress.style.display = 'block';
+
+      try {
+        await uploadFile(file);
+        showAlert('success', 'File uploaded successfully!');
+        loadFiles();
+      } catch (err) {
+        showAlert('error', err.message);
+      } finally {
+        progress.style.display = 'none';
+        document.getElementById('file-input').value = ''; // Reset input
+      }
+    }
+  </script>
+</body>
+
+</html>

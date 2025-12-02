@@ -1,0 +1,15 @@
+.git
+.gitignore
+.env.example
+.env.local
+.env.*.local
+*.md
+node_modules
+npm-debug.log
+.DS_Store
+.next
+.vercel
+test-*.js
+COMPLETE_SETUP.js
+scripts/
+supabase/

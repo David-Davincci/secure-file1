@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Cloud - Encrypted Storage</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <nav class="navbar">
+    <div class="container nav-content">
+      <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px;">
+        <img src="/logo.png" alt="Secure Cloud" style="width: 32px; height: 32px;">
+        <span>Secure Cloud</span>
+      </a>
+      <div>
+        <a href="/auth/login.html" class="btn btn-outline" style="margin-right: 10px;">Login</a>
+        <a href="/auth/register.html" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container"
+    style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 4rem 1rem;">
+    <div style="text-align: center; max-width: 800px;">
+      <h1
+        style="font-size: 3.5rem; margin-bottom: 1.5rem; background: linear-gradient(to right, #fff, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+        Secured Cloud Storage
+      </h1>
+      <p style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem;">
+        Store your files with confidence. AES-256 encryption wrapped with RSA-2048 keys ensures only you can access your
+        data.
+      </p>
+
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem;">
+        <div class="glass-card">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔐</div>
+          <h3>End-to-End Encryption</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Files are encrypted before they hit our storage.</p>
+        </div>
+        <div class="glass-card">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚡</div>
+          <h3>Lightning Fast</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">Optimized for speed without compromising security.
+          </p>
+        </div>
+        <div class="glass-card">
+          <div style="font-size: 2.5rem; margin-bottom: 1rem;">🛡️</div>
+          <h3>Zero Knowledge</h3>
+          <p style="color: var(--text-muted); margin-top: 0.5rem;">We can't read your files even if we wanted to.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-muted); border-top: 1px solid var(--border);">
+    &copy; 2024 Secure Cloud. All rights reserved.
+  </footer>
+</body>
+
+</html>

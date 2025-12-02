@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Secure Cloud</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-content">
+            <a href="/" class="logo" style="display: flex; align-items: center; gap: 10px;">
+                <img src="/logo.png" alt="Secure Cloud" style="width: 32px; height: 32px;">
+                <span>Secure Cloud</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container" style="flex: 1; display: flex; align-items: center; justify-content: center;">
+        <div class="glass-card" style="width: 100%; max-width: 400px; text-align: center;">
+            <div id="status-icon" style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+            <h2 id="status-title">Verifying...</h2>
+            <p id="status-message" style="color: var(--text-muted); margin-top: 0.5rem;">Please wait while we verify
+                your email.</p>
+
+            <a id="login-btn" href="/auth/login.html" class="btn btn-primary"
+                style="margin-top: 1.5rem; display: none;">Go to Login</a>
+        </div>
+    </main>
+
+    <script src="/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                setStatus('error', 'Invalid Link', 'This verification link is invalid or missing.');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/auth/verify?token=${token}`);
+                const data = await res.json();
+
+                if (res.ok) {
+                    setStatus('success', 'Email Verified!', 'Your account has been successfully verified.');
+                    document.getElementById('login-btn').style.display = 'inline-flex';
+                } else {
+                    setStatus('error', 'Verification Failed', data.error || 'The link may be expired or invalid.');
+                }
+            } catch (err) {
+                setStatus('error', 'Error', 'An unexpected error occurred.');
+            }
+        });
+
+        function setStatus(type, title, message) {
+            const icon = document.getElementById('status-icon');
+            const titleEl = document.getElementById('status-title');
+            const msgEl = document.getElementById('status-message');
+
+            if (type === 'success') {
+                icon.textContent = '✅';
+                titleEl.style.color = 'var(--success)';
+            } else {
+                icon.textContent = '❌';
+                titleEl.style.color = 'var(--error)';
+            }
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+        }
+    </script>
+</body>
+
+</html>
