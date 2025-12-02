@@ -6,6 +6,25 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 require('dotenv').config();
 
+// Validate critical environment variables
+const requiredEnvVars = [
+  'SUPABASE_URL',
+  'SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'JWT_SECRET',
+  'RSA_PUBLIC_KEY',
+  'RSA_PRIVATE_KEY',
+  'SUPABASE_STORAGE_BUCKET'
+];
+
+const missingVars = requiredEnvVars.filter(v => !process.env[v]);
+
+if (missingVars.length > 0) {
+  console.warn(`⚠️ Warning: Missing environment variables: ${missingVars.join(', ')}`);
+  console.warn('ℹ️ Some routes may fail if these variables are not configured.');
+  console.warn('ℹ️ Please set these in your Vercel environment settings.');
+}
+
 const authRoutes = require('./routes/authRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 

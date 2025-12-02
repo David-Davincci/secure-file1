@@ -24,6 +24,12 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
         const file = req.file;
         const userId = req.user.id;
 
+        // Check required env vars
+        if (!process.env.SUPABASE_STORAGE_BUCKET) {
+            console.error('❌ Missing SUPABASE_STORAGE_BUCKET');
+            return res.status(503).json({ error: 'Service temporarily unavailable. Missing storage configuration.' });
+        }
+
         // 1. Encrypt file content (AES)
         // Returns { encryptedFile, rawKey }
         const { encryptedFile, rawKey } = encryptFile(file.buffer);
@@ -31,7 +37,8 @@ router.post('/upload', protect, upload.single('file'), async (req, res) => {
         // 2. Encrypt AES key (RSA)
         const rsaPublicKey = process.env.RSA_PUBLIC_KEY;
         if (!rsaPublicKey) {
-            throw new Error('Server configuration error: Missing RSA Public Key');
+            console.error('❌ Missing RSA_PUBLIC_KEY');
+            return res.status(503).json({ error: 'Service temporarily unavailable. Missing encryption key.' });
         }
         const encryptedAesKey = encryptWithRSA(rawKey, rsaPublicKey);
 
